@@ -6,9 +6,9 @@ inputs:
     required: false
     default: 947577070829.dkr.ecr.us-west-2.amazonaws.com
   ECR_REPO:  # id of input
-    description: 'Repo, defaults to wiser/${{project_name}}'
+    description: 'Repo, defaults to wiser/${{github.event.inputs.project}}'
     required: false
-    default: wiser/instore-mission-deploy-service
+    default: wiser/${{github.event.inputs.project}}
   INPUT_TOKEN: 
     description: 'Authentication Token'
     required: true
@@ -24,7 +24,7 @@ runs:
   using: "composite"
   shell: bash
   steps:
-    - run: chmod +x ./gradlew && ./gradlew bootJar && pwd && ls -al build && ls -al build/libs
+    - run: chmod +x ./gradlew && ./gradlew bootJar
       shell: bash
     - id: build-image
       run: |
