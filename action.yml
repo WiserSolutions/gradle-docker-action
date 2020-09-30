@@ -1,0 +1,38 @@
+name: Build & Publish 
+description: 
+inputs:
+  ECR_REGISTRY:  # id of input
+    description: 'Registry, defaults to 947577070829.dkr.ecr.us-west-2.amazonaws.com'
+    required: false
+    default: 947577070829.dkr.ecr.us-west-2.amazonaws.com
+  ECR_REPO:  # id of input
+    description: 'Repo, defaults to wiser/${{project_name}}'
+    required: false
+    default: wiser/instore-mission-deploy-service
+  INPUT_TOKEN: 
+    description: 'Authentication Token'
+    required: true
+  IMAGE_TAG:
+    description: 'Tag for docker image'
+    reqired: true
+outputs:
+  random-number: 
+    description: Status for now
+    value: 'OK'
+
+runs:
+  using: "composite"
+  shell: bash
+  steps:
+    - run: chmod +x ./gradlew && ./gradlew bootJar && pwd && ls -al build && ls -al build/libs
+      shell: bash
+    - id: build-image
+      run: |
+        # Build a docker container and
+        # push it to ECR
+        echo "${INPUT_TOKEN}" | docker login -u AWS --password-stdin ${ECR_REGISTRY}
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+        echo "::set-output TAG=$IMAGE_TAG"
+    shell: bash
