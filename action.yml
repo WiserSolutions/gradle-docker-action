@@ -7,12 +7,17 @@ inputs:
   ECR_REPO:  
     description: 'Repo (must already exist in the Registry )'
     required: true
-  INPUT_TOKEN: 
+  AUTH_USER:
+    description: 'Username, defaults to AWS'
+    required: false
+    default: AWS
+  AUTH_TOKEN: 
     description: 'Authentication Token for the Repository'
     required: true
   IMAGE_TAG:
     description: 'Tag(s) for docker image'
     reqired: true
+  
 outputs:
   random-number: 
     description: Status for now
@@ -27,9 +32,9 @@ runs:
       run: |
         # Build a docker container and
         # push it to ECR
-        echo "${INPUT_TOKEN}" | docker login -u AWS --password-stdin ${ECR_REGISTRY}
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-        echo "::set-output TAG=$IMAGE_TAG"
+        echo "${{ inputs.AUTH_TOKEN}}" | docker login -u ${{ inputs.AUTH_USE}} --password-stdin ${{ inputs.ECR_REGISTRY}}
+        docker build -t ${{inputs.ECR_REGISTRY}}/${{inputs.ECR_REPO}}:${{inputs.IMAGE_TAG}} .
+        docker push ${{inputs.ECR_REGISTRY}}/${{inputs.ECR_REPO}}:${{inputs.IMAGE_TAG}}
+        echo "::set-output name=image::${{inputs.ECR_REGISTRY}}/${{inputs.ECR_REPO}}:${{inputs.IMAGE_TAG}}"
+        echo "::set-output TAG=${{inputs.IMAGE_TAG}}"
       shell: bash
