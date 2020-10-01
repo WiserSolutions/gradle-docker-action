@@ -2,9 +2,8 @@ name: Build & Publish
 description: 
 inputs:
   ECR_REGISTRY:  # id of input
-    description: 'Registry, defaults to 947577070829.dkr.ecr.us-west-2.amazonaws.com'
-    required: false
-    default: 947577070829.dkr.ecr.us-west-2.amazonaws.com
+    description: 'Registry to push images to'
+    required: true
   ECR_REPO:  # id of input
     description: 'Repo, defaults to wiser/${{github.event.inputs.project}}'
     required: false
