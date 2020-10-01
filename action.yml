@@ -32,7 +32,8 @@ runs:
       run: |
         # Build a docker container and
         # push it to ECR
-        echo "${{ inputs.AUTH_TOKEN}}" | docker login -u ${{ inputs.AUTH_USE}} --password-stdin ${{ inputs.ECR_REGISTRY}}
+        echo "inputs:  {{ inputs.AUTH_TOKEN}} | docker login -u ${{ inputs.AUTH_USER}}  ${{inputs.ECR_REGISTRY}}/${{inputs.ECR_REPO}}:${{inputs.IMAGE_TAG}} "
+        echo "${{ inputs.AUTH_TOKEN}}" | docker login -u ${{ inputs.AUTH_USER}} --password-stdin ${{ inputs.ECR_REGISTRY}}
         docker build -t ${{inputs.ECR_REGISTRY}}/${{inputs.ECR_REPO}}:${{inputs.IMAGE_TAG}} .
         docker push ${{inputs.ECR_REGISTRY}}/${{inputs.ECR_REPO}}:${{inputs.IMAGE_TAG}}
         echo "::set-output name=image::${{inputs.ECR_REGISTRY}}/${{inputs.ECR_REPO}}:${{inputs.IMAGE_TAG}}"
