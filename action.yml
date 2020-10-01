@@ -1,10 +1,10 @@
 name: Build & Publish 
 description: 
 inputs:
-  ECR_REGISTRY:  # id of input
+  ECR_REGISTRY:
     description: 'Registry to push images to'
     required: true
-  ECR_REPO:  # id of input
+  ECR_REPO:  
     description: 'Repo, defaults to wiser/${{github.event.inputs.project}}'
     required: false
     default: wiser/${{github.event.inputs.project}}
@@ -21,7 +21,6 @@ outputs:
 
 runs:
   using: "composite"
-  shell: bash
   steps:
     - run: chmod +x ./gradlew && ./gradlew bootJar
       shell: bash
@@ -34,4 +33,4 @@ runs:
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
         echo "::set-output TAG=$IMAGE_TAG"
-    shell: bash
+      shell: bash
