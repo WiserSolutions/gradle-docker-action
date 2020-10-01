@@ -5,14 +5,13 @@ inputs:
     description: 'Registry to push images to'
     required: true
   ECR_REPO:  
-    description: 'Repo, defaults to wiser/${{github.event.inputs.project}}'
-    required: false
-    default: wiser/${{github.event.inputs.project}}
+    description: 'Repo (must already exist in the Registry )'
+    required: true
   INPUT_TOKEN: 
-    description: 'Authentication Token'
+    description: 'Authentication Token for the Repository'
     required: true
   IMAGE_TAG:
-    description: 'Tag for docker image'
+    description: 'Tag(s) for docker image'
     reqired: true
 outputs:
   random-number: 
